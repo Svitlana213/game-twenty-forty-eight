@@ -36,8 +36,8 @@ class Board {
        return;
      }
 
-     for(int r = 0; r < row; r++){
-       for(int c = 0; c < column; c++){
+     for(int r = 0; r < row; ++r){
+       for(int c = 0; c < column; ++c){
          mergeLeft(r, c);
        }
      }
@@ -50,8 +50,8 @@ class Board {
        return;
      }
 
-     for(int r = 0; r < row; r++){
-       for(int c = column - 2; c >= 0; c--){
+     for(int r = 0; r < row; ++r){
+       for(int c = column - 2; c >= 0; --c){
          mergeRight(r, c);
        }
      }
@@ -64,8 +64,8 @@ class Board {
        return;
      }
 
-     for(int r = 0; r < row; r++){
-       for(int c = 0; c < column; c++){
+     for(int r = 0; r < row; ++r){
+       for(int c = 0; c < column; ++c){
          mergeUp(r, c);
        }
      }
@@ -78,8 +78,8 @@ class Board {
        return;
      }
 
-     for(int r = row - 2; r >= 0; r--){
-       for(int c = 0; c < column; c++){
+     for(int r = row - 2; r >= 0; --r){
+       for(int c = 0; c < column; ++c){
          mergeDown(r, c);
        }
      }
@@ -89,8 +89,8 @@ class Board {
 
 
    bool canMoveLeft(){
-     for(int r = 0; r < row; r++){
-       for(int c = 1; c < column; c++){
+     for(int r = 0; r < row; ++r){
+       for(int c = 1; c < column; ++c){
          if(canMerge(_boardTiles[r][c], _boardTiles[r][c - 1])){
            return true;
          }
@@ -100,8 +100,8 @@ class Board {
    }
 
    bool canMoveRight(){
-     for(int r = 0; r < row; r++){
-       for(int c = column - 2; c >= 0; c--){
+     for(int r = 0; r < row; ++r){
+       for(int c = column - 2; c >= 0; --c){
          if(canMerge(_boardTiles[r][c], _boardTiles[r][c + 1])){
            return true;
          }
@@ -111,8 +111,8 @@ class Board {
    }
 
    bool canMoveUp(){
-     for(int r = 1; r < row; r++){
-       for(int c = 0; c < column; c++){
+     for(int r = 1; r < row; ++r){
+       for(int c = 0; c < column; ++c){
          if(canMerge(_boardTiles[r][c], _boardTiles[r - 1][c])){
            return true;
          }
@@ -123,8 +123,8 @@ class Board {
 
 
    bool canMoveDown(){
-     for(int r = row - 2; r >= 0; r--){
-       for(int c = 0; c >= 0; c++){
+     for(int r = row - 2; r >= 0; --r){
+       for(int c = 0; c >= 0; ++c){
          if(canMerge(_boardTiles[r][c], _boardTiles[r + 1][c])){
            return true;
          }
@@ -174,7 +174,7 @@ class Board {
 
      if(b.isEmpty()){
        b.value = a.value;
-       b.value = 0;
+       a.value = 0;
      } else if (a == b){
        b.value *= 2;
        score += b.value;
@@ -207,7 +207,7 @@ class Board {
      int index = rng.nextInt(empty.length);
      empty[index].value = rng.nextInt(9) == 0 ? 4 : 2;
      empty[index].isNew = true;
-     empty.removeAt(index);
+     // empty.removeAt(index);
 
    }
 

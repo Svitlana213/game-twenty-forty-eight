@@ -22,7 +22,7 @@ class Game extends StatelessWidget{
             left: c * width * state.tilePadding * (c + 1),
             top: r * width * state.tilePadding * (r + 1),
             size: width,
-            color: Colors.white38,
+            color: Colors.grey,
             text: '',
         );
         backgroundBox.add(tile);
@@ -135,8 +135,7 @@ class _BoardWidgetState extends State<BoardWidget> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text('Score: '),
-                          Text(_board.score.toString())
+                          Text('Score: ${_board.score.toString()}', style: TextStyle(color: Colors.white, fontSize: 24),),
                         ],
                       ),
                     ),
@@ -163,7 +162,7 @@ class _BoardWidgetState extends State<BoardWidget> {
             Container(
               height: 40,
               child: Opacity(
-                opacity: gameOver ? 0.0 : 1.0,
+                opacity: gameOver ? 1.0 : 0.0,
                 child: Center(
                   child: Text('Game over'),
                 ),
