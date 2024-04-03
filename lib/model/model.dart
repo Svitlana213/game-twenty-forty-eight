@@ -122,16 +122,17 @@ class Board {
    }
 
 
-   bool canMoveDown(){
-     for(int r = row - 2; r >= 0; --r){
-       for(int c = 0; c >= 0; ++c){
-         if(canMerge(_boardTiles[r][c], _boardTiles[r + 1][c])){
-           return true;
-         }
-       }
-     }
-     return false;
-   }
+  bool canMoveDown(){
+    for(int r = row - 2; r >= 0; --r){
+      for(int c = 0; c < column; ++c){
+        if(canMerge(_boardTiles[r][c], _boardTiles[r + 1][c])){
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
 
   void mergeLeft(int row, int col){
      while(col > 0){
@@ -164,28 +165,29 @@ class Board {
      return !a.canMerge && ((b.isEmpty() && !a.isEmpty()) || (!a.isEmpty() && a == b));
    }
 
-   void merge(Tile a, Tile b){
-     if(!canMerge(a, b)){
-       if(!a.isEmpty() && !b.canMerge){
-         b.canMerge = true;
-       }
-       return;
-     }
+  void merge(Tile a, Tile b){
+    if(!canMerge(a, b)){
+      if(!a.isEmpty() && !b.canMerge){
+        b.canMerge = true;
+      }
+      return;
+    }
 
-     if(b.isEmpty()){
-       b.value = a.value;
-       a.value = 0;
-     } else if (a == b){
-       b.value *= 2;
-       score += b.value;
-       a.value = 0;
-       b.canMerge = true;
-     } else{
-       b.canMerge = true;
-     }
-   }
+    if(b.isEmpty()){
+      b.value = a.value;
+      a.value = 0;
+    } else if (a.value == b.value && !b.canMerge){
+      b.value *= 2;
+      score += b.value;
+      a.value = 0;
+      b.canMerge = true;
+    } else{
+      b.canMerge = true;
+    }
+  }
 
-    bool gameOver(){
+
+  bool gameOver(){
      return !canMoveLeft() && !canMoveRight() && !canMoveDown() && !canMoveDown();
    }
 
