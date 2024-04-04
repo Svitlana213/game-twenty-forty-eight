@@ -22,7 +22,7 @@ class Game extends StatelessWidget{
             left: c * width * state.tilePadding * (c + 1),
             top: r * width * state.tilePadding * (r + 1),
             size: width,
-            color: Colors.grey,
+            color: Color.fromARGB(250, 205, 193, 180),
             text: '',
         );
         backgroundBox.add(tile);
@@ -35,7 +35,8 @@ class Game extends StatelessWidget{
         width: state.boardSize().width,
         height: state.boardSize().width,
         decoration: BoxDecoration(
-          color: Colors.white38
+          color: Color.fromARGB(250, 205, 193, 180),
+          borderRadius: BorderRadius.circular(20)
         ),
         child: Stack(
           fit: StackFit.expand,
@@ -76,13 +77,14 @@ class _BoardWidgetState extends State<BoardWidget> {
   void newGame() {
     setState(() {
       _board.initBoard();
-      gameOver = false;
+      gameOver = _board.gameOver();
     });
   }
 
   void gameover(){
     setState(() {
       if(_board.gameOver()){
+        EndGameScreen.show(context, this);
         gameOver = true;
       }
     });
@@ -121,107 +123,122 @@ class _BoardWidgetState extends State<BoardWidget> {
     children.add(Game(state: this,));
     children.addAll(_tileWidgets);
 
-    return ListView(
-          children: <Widget>[
-            Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  Container(
-                    color: Colors.cyan,
-                    width: 100.0,
-                    height: 60.0,
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text('Score: ${_board.score.toString()}', style: TextStyle(color: Colors.white, fontSize: 24),),
-                        ],
-                      ),
+    return Scaffold(
+          backgroundColor: Color.fromARGB(250, 232, 220, 202),
+          body: Column(
+            children:[
+              Container(
+                child: Column(
+                  children:[
+                    SizedBox(height: 50),
+                    Center(
+                      child: Text('2048 game', style: TextStyle(fontSize: 36, fontWeight: FontWeight.w500),),
                     ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      newGame();
-                    },
-                    child: Container(
-                      width: 100.0,
-                      height: 50.0,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        color: Colors.orange,
-                      ),
-                      child: Center(
-                        child: Text('New game'),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              height: 40,
-              child: Opacity(
-                opacity: gameOver ? 1.0 : 0.0,
-                child: Center(
-                  child: Text('Game over'),
+                    SizedBox(height: 30),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Text('Score: ${_board.score.toString()}', style: TextStyle(color: Colors.black, fontSize: 24),),
+                        ElevatedButton(
+                          onPressed: () {
+                            newGame();
+                          },
+                          child: Text('New game'),
+                        ),
+                      ],
+                    )
+                  ],
                 ),
               ),
-            ),
-            Container(
-              width: _queryData.size.width,
-              height: _queryData.size.width,
-              child: GestureDetector(
-                onVerticalDragUpdate: (detail) {
-                  if (detail.delta.distance == 0 || _isMoving) {
-                    return;
-                  }
-                  _isMoving = true;
-                  if (detail.delta.direction > 0) {
-                    setState(() {
-                      _board.moveDown();
-                      gameover();
-                    });
-                  } else {
-                    setState(() {
-                      _board.moveUp();
-                    });
-                  }
-                },
-                onVerticalDragEnd: (detail) {
-                  _isMoving = false;
-                },
-                onVerticalDragCancel: () {
-                  _isMoving = false;
-                },
-                onHorizontalDragUpdate: (detail) {
-                  if (detail.delta.distance == 0 || _isMoving) {
-                    return;
-                  }
-                  _isMoving = true;
-                  if (detail.delta.direction > 0) {
-                    setState(() {
-                      _board.moveLeft();
-                    });
-                  } else {
-                    setState(() {
-                      _board.moveRight();
-                    });
-                  }
-                },
-                onHorizontalDragEnd: (detail) {
-                  _isMoving = false;
-                },
-                onHorizontalDragCancel: () {
-                  _isMoving = false;
-                },
-                child: Stack(
-                  children: children,
+              SizedBox(height: 50),
+              Container(
+                width: _queryData.size.width,
+                height: _queryData.size.width,
+                child: GestureDetector(
+                  onVerticalDragUpdate: (detail) {
+                    if (detail.delta.distance == 0 || _isMoving) {
+                      return;
+                    }
+                    _isMoving = true;
+                    if (detail.delta.direction > 0) {
+                      setState(() {
+                        _board.moveDown();
+                        gameover();
+                      });
+                    } else {
+                      setState(() {
+                        _board.moveUp();
+                      });
+                    }
+                  },
+
+                  onVerticalDragEnd: (detail) {
+                    _isMoving = false;
+                  },
+                  onVerticalDragCancel: () {
+                    _isMoving = false;
+                  },
+
+                  onHorizontalDragUpdate: (detail) {
+                    if (detail.delta.distance == 0 || _isMoving) {
+                      return;
+                    }
+                    _isMoving = true;
+                    if (detail.delta.direction > 0) {
+                      setState(() {
+                        _board.moveLeft();
+                      });
+                    } else {
+                      setState(() {
+                        _board.moveRight();
+                      });
+                    }
+                  },
+
+                  onHorizontalDragEnd: (detail) {
+                    _isMoving = false;
+                  },
+                  onHorizontalDragCancel: () {
+                    _isMoving = false;
+                  },
+                  child: Stack(
+                    children: children,
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
+          
         );
+  }
+}
+
+class EndGameScreen {
+  static void show(BuildContext context, _BoardWidgetState state){
+    showDialog(
+        context: context, 
+        builder: (context) => Container(
+          width: 50,
+          height: 50,
+          child: AlertDialog(
+            backgroundColor: Colors.grey,
+            alignment: Alignment.center,
+            title: Text('Game over', style: TextStyle(color: Colors.black),),
+            actions: [
+              ElevatedButton(
+                onPressed: () {
+                  state.newGame();
+                  Navigator.pop(context);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                ),
+                child: Text('New game', style: TextStyle(color: Colors.black)),
+              ),
+            ],
+          ),
+        )
+    );
   }
 }
 
@@ -320,7 +337,14 @@ class TileBox extends StatelessWidget{
   final Color color;
   final String text;
 
-  const TileBox({super.key, required this.left, required this.top, required this.size, required this.color, required this.text});
+  const TileBox({
+    super.key, 
+    required this.left, 
+    required this.top, 
+    required this.size, 
+    required this.color, 
+    required this.text,
+});
 
   @override
   Widget build(BuildContext context) {
@@ -332,9 +356,10 @@ class TileBox extends StatelessWidget{
         height: size,
         decoration: BoxDecoration(
           color: color,
+          borderRadius: BorderRadius.circular(20.0),
         ),
         child: Center(
-          child: Text(text),
+          child: Text(text, style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),),
         ),
       ),
     );

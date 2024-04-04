@@ -43,6 +43,7 @@ class Board {
      }
      randomEmpltyTiles();
      resetCanMerge();
+     gameOver();
    }
 
    void moveRight(){
@@ -57,6 +58,7 @@ class Board {
      }
      randomEmpltyTiles();
      resetCanMerge();
+     gameOver();
    }
 
    void moveUp(){
@@ -71,6 +73,7 @@ class Board {
      }
      randomEmpltyTiles();
      resetCanMerge();
+     gameOver();
    }
 
    void moveDown(){
@@ -85,6 +88,7 @@ class Board {
      }
      randomEmpltyTiles();
      resetCanMerge();
+     gameOver();
    }
 
 
