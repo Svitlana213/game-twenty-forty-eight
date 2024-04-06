@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'board.dart';
+import 'widgets/boardWidget.dart';
 
 class EndGameScreen {
-  static void show(BuildContext context, BoardWidgetState state){
+  static void show(BuildContext context, BoardWidgetState state, {bool isWin = false}){
     showDialog(
       context: context,
       builder: (context) => Material(
@@ -14,8 +14,15 @@ class EndGameScreen {
             height: 50,
             child: AlertDialog(
               backgroundColor: Colors.white,
-              alignment: Alignment.center,
-              title: Text('Game over', style: TextStyle(color: Colors.black), textAlign: TextAlign.center,),
+              title: Text(
+                isWin ? 'Congratulations!' : 'Game Over',
+                style: TextStyle(color: Colors.black),
+                textAlign: TextAlign.center,
+              ),
+              content: Text(
+                isWin ? "You've reached 2048!" : "Try again to reach 2048!",
+                textAlign: TextAlign.center,
+              ),
               actions: [
                 Center(
                   child: ElevatedButton(

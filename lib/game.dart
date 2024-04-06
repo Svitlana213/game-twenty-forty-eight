@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'game/board.dart';
+import 'game/widgets/boardWidget.dart';
 import 'game/tileBox.dart';
 
 class Game extends StatelessWidget{

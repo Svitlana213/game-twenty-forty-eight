@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../../model/model.dart';
+import '../../model/tile.dart';
 import '../../utils/utils.dart';
-import '../board.dart';
+import '../widgets/boardWidget.dart';
 import '../tileBox.dart';
 
 class AnimatedTileWidget extends AnimatedWidget{
@@ -12,7 +12,6 @@ class AnimatedTileWidget extends AnimatedWidget{
   AnimatedTileWidget(
       {required Key key, required this.tile, required this.state, required Animation<double>animation})
       : super(key: key, listenable: animation);
-
 
   @override
   Widget build(BuildContext context) {

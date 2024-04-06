@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../game.dart';
-import '../model/model.dart';
-import 'endGame.dart';
+import '../../game.dart';
+import '../../model/boardModel.dart';
+import '../endGame.dart';
 import 'tileWidget.dart';
 
 class BoardWidget extends StatefulWidget{
@@ -27,7 +27,6 @@ class BoardWidgetState extends State<BoardWidget> {
     column = 4;
     _isMoving = false;
     gameOver = false;
-
     _board = Board(row, column);
     newGame();
   }
@@ -41,8 +40,11 @@ class BoardWidgetState extends State<BoardWidget> {
 
   void gameover(){
     setState(() {
-      if(_board.gameOver()){
-        EndGameScreen.show(context, this);
+      if(_board.winGame()){
+        EndGameScreen.show(context, this, isWin: true);
+        gameOver = true;
+      } else if(_board.gameOver()){
+        EndGameScreen.show(context, this, isWin: false);
         gameOver = true;
       }
     });
@@ -58,8 +60,8 @@ class BoardWidgetState extends State<BoardWidget> {
 
     List<TileWidget> _tileWidgets = [];
 
-    for (int r = 0; r < row; ++r) {
-      for (int c = 0; c < column; ++c) {
+    for (int r = 0; r < row; r++) {
+      for (int c = 0; c < column; c++) {
         _tileWidgets.add(TileWidget(
           key: UniqueKey(),
           tile: _board.getTile(r, c),
@@ -69,7 +71,6 @@ class BoardWidgetState extends State<BoardWidget> {
     }
 
     List<Widget> children = List<Widget>.empty(growable: true);
-
     children.add(Game(state: this,));
     children.addAll(_tileWidgets);
 
@@ -91,7 +92,6 @@ class BoardWidgetState extends State<BoardWidget> {
                     Text('Score: ${_board.score.toString()}', style: TextStyle(color: Colors.black, fontSize: 24),),
                     ElevatedButton(
                       onPressed: () {
-
                         newGame();
                       },
                       style: ElevatedButton.styleFrom(
@@ -119,14 +119,20 @@ class BoardWidgetState extends State<BoardWidget> {
                 _isMoving = true;
                 if (detail.delta.direction > 0) {
                   setState(() {
-                    _board.moveDown();
-                    gameover();
+                    if(_board.canMoveDown()){
+                      _board.moveDown();
+                    }
                   });
                 } else {
                   setState(() {
+                    if(_board.canMoveUp()){
                     _board.moveUp();
+                    }
                   });
                 }
+                gameover();
+                _board.randomEmpltyTiles();
+                _board.resetCanMerge();
               },
 
               onVerticalDragEnd: (detail) {
@@ -143,13 +149,20 @@ class BoardWidgetState extends State<BoardWidget> {
                 _isMoving = true;
                 if (detail.delta.direction > 0) {
                   setState(() {
-                    _board.moveLeft();
+                    if(_board.canMoveLeft()) {
+                      _board.moveLeft();
+                    }
                   });
                 } else {
                   setState(() {
-                    _board.moveRight();
+                    if(_board.canMoveRight()) {
+                      _board.moveRight();
+                    }
                   });
                 }
+                gameover();
+                _board.randomEmpltyTiles();
+                _board.resetCanMerge();
               },
 
               onHorizontalDragEnd: (detail) {

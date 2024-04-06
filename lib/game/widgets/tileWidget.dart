@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
-import '../model/model.dart';
-import 'animation/animation.dart';
-import 'board.dart';
+import '../../model/tile.dart';
+import '../animation/animation.dart';
+import 'boardWidget.dart';
 
 class TileWidget extends StatefulWidget{
   final Tile tile;

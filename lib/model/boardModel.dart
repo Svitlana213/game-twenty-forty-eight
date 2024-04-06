@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:twenty_forty_eight/model/tile.dart';
+
 class Board {
   final int row;
   final int column;
@@ -35,62 +37,45 @@ class Board {
      if(!canMoveLeft()){
        return;
      }
-
      for(int r = 0; r < row; ++r){
        for(int c = 0; c < column; ++c){
          mergeLeft(r, c);
        }
      }
-     randomEmpltyTiles();
-     resetCanMerge();
-     gameOver();
    }
 
    void moveRight(){
      if(!canMoveRight()){
        return;
      }
-
      for(int r = 0; r < row; ++r){
        for(int c = column - 2; c >= 0; --c){
          mergeRight(r, c);
        }
      }
-     randomEmpltyTiles();
-     resetCanMerge();
-     gameOver();
    }
 
    void moveUp(){
      if(!canMoveUp()){
        return;
      }
-
      for(int r = 0; r < row; ++r){
        for(int c = 0; c < column; ++c){
          mergeUp(r, c);
        }
      }
-     randomEmpltyTiles();
-     resetCanMerge();
-     gameOver();
    }
 
    void moveDown(){
      if(!canMoveDown()){
        return;
      }
-
      for(int r = row - 2; r >= 0; --r){
        for(int c = 0; c < column; ++c){
          mergeDown(r, c);
        }
      }
-     randomEmpltyTiles();
-     resetCanMerge();
-     gameOver();
    }
-
 
    bool canMoveLeft(){
      for(int r = 0; r < row; ++r){
@@ -125,7 +110,6 @@ class Board {
      return false;
    }
 
-
   bool canMoveDown(){
     for(int r = row - 2; r >= 0; --r){
       for(int c = 0; c < column; ++c){
@@ -136,7 +120,6 @@ class Board {
     }
     return false;
   }
-
 
   void mergeLeft(int row, int col){
      while(col > 0){
@@ -190,9 +173,19 @@ class Board {
     }
   }
 
+  bool winGame(){
+     for (int r = 0; r < row; ++r){
+       for (int c = 0; c < column; ++c){
+         if(getTile(r, c).value == 2048){
+           return true;
+         }
+       }
+     }
+     return false;
+  }
 
   bool gameOver(){
-     return !canMoveLeft() && !canMoveRight() && !canMoveDown() && !canMoveDown();
+     return !canMoveLeft() && !canMoveRight() && !canMoveDown() && !canMoveUp();
    }
 
    Tile getTile(int row, int column){
@@ -213,8 +206,6 @@ class Board {
      int index = rng.nextInt(empty.length);
      empty[index].value = rng.nextInt(9) == 0 ? 4 : 2;
      empty[index].isNew = true;
-     // empty.removeAt(index);
-
    }
 
    void resetCanMerge(){
@@ -224,34 +215,5 @@ class Board {
        });
      });
    }
-
 }
 
-class Tile {
-  int row, column;
-  int value;
-  bool canMerge;
-  bool isNew;
-
-  Tile({
-    required this.row,
-    required this.column,
-    this.value = 0,
-    required this.canMerge,
-    required this.isNew
-  });
-
-  bool isEmpty(){
-    return value == 0;
-  }
-
-  @override
-  int get hashCode{
-    return value.hashCode;
-  }
-
-  @override
-  operator == (other){
-    return other is Tile && value == other.value;
-  }
-}
