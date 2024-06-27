@@ -25,6 +25,3 @@ Click "New game" to start a new game at any time.
 ## Dependencies
 Flutter
 Dart
-
-## Author
-Svitana Bondar
